@@ -1,6 +1,6 @@
 # simple COM demo
 
-## references 
+## references
 
 1. source code from [Building and Registering a Proxy DLL][2]
 2. about rpcndr.lib [解决: libcimtd.lib not found, rpcndr.lib not found][1]
