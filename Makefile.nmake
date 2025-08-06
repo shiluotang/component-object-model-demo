@@ -1,0 +1,20 @@
+PROXYSTUBOBJS = dlldata.obj example.obj iids.obj
+PROXYSTUBLIBS = kernel32.lib rpcns4.lib rpcrt4.lib uuid.lib
+# rpcndr.lib is out of fashion, use rpcrt4.lib instead of it
+# PROXYSTUBLIBS = $(PROXYSTUBLIBS) rpcndr.lib
+GENERATED_FILES = example.h example.tlb example_p.c example_i.c dlldata.c
+
+$(GENERATED_FILES) : example.idl
+	midl example.idl
+dlldata.obj : dlldata.c
+	cl /nologo /c /DWIN32 /DREGISTER_PROXY_DLL dlldata.c
+example.obj : example_p.c
+	cl /nologo /c /DWIN32 /DREGISTER_PROXY_DLL /Foexample.obj example_p.c
+iids.obj : example_i.c
+	cl /nologo /c /DWIN32 /DREGISTER_PROXY_DLL /Foiids.obj example_i.c
+proxy.dll : $(PROXYSTUBOBJS) example.def
+	link /nologo /dll /machine:x64 /out:proxy.dll /def:example.def $(PROXYSTUBOBJS) $(PROXYSTUBLIBS)
+	regsvr32 /s proxy.dll
+clean:
+	del /q $(GENERATED_FILES) $(PROXYSTUBOBJS) proxy.*
+all: proxy.dll
