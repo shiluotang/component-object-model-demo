@@ -5,7 +5,7 @@ PROXYSTUBLIBS = kernel32.lib rpcns4.lib rpcrt4.lib uuid.lib
 GENERATED_FILES = example.h example.tlb example_p.c example_i.c dlldata.c
 
 $(GENERATED_FILES) : example.idl
-	midl example.idl
+	midl /nologo example.idl
 dlldata.obj : dlldata.c
 	cl /nologo /c /DWIN32 /DREGISTER_PROXY_DLL dlldata.c
 example.obj : example_p.c
